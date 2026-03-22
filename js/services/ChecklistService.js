@@ -28,11 +28,10 @@ export class ChecklistService {
     });
   }
 
-  setAnswer(id, status, obs = '', photos = []) {
+  setAnswer(id, status, obs) {
     if (this.state.respostas[id]) {
-      this.state.respostas[id].status = status;
+      if (status !== undefined) this.state.respostas[id].status = status;
       if (obs !== undefined) this.state.respostas[id].obs = obs;
-      if (photos.length > 0) this.state.respostas[id].photos = photos;
     }
   }
 
