@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Checklist de Conformidade</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="appContainer"></div>
+
+    <!-- SIGNATURE MODAL (Static in index to avoid complex removal/re-addition) -->
+    <div class="sig-modal-overlay" id="sigModalOverlay">
+      <div class="sig-modal">
+        <div class="sig-modal-header">
+          <span class="sig-modal-title" id="sigModalTitle">Assinatura</span>
+          <button onclick="window.app.closeSigModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-muted);">×</button>
+        </div>
+        <div class="sig-modal-subtitle">Assine com o dedo na área abaixo</div>
+        <div class="sig-canvas-wrap">
+          <canvas id="sigCanvas"></canvas>
+          <div class="sig-canvas-empty" id="sigCanvasEmpty">✍️ Assine aqui</div>
+        </div>
+        <div class="sig-actions">
+          <button class="sig-btn-clear" onclick="window.app.clearSigCanvas()">🗑 Limpar</button>
+          <button class="sig-btn-save" onclick="window.app.saveSig()">Confirmar assinatura</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+      <span>Gerando PDF...</span>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

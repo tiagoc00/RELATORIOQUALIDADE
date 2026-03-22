@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Checklist de Conformidade</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F4F0;
+    --surface: #FFFFFF;
+    --surface2: #EFEDE8;
+    --border: #E0DDD6;
+    --text: #1A1916;
+    --text-muted: #7A7770;
+    --accent: #1A6B3C;
+    --accent-light: #E8F4EE;
+    --danger: #C0392B;
+    --danger-light: #FDECEA;
+    --warning: #D4881A;
+    --warning-light: #FEF6E8;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--text);
+    color: #fff;
+    padding: 20px 20px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .logo {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: .08em;
+    opacity: .6;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+  }
+  .header-meta {
+    font-size: 12px;
+    opacity: .55;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── SCREEN MANAGEMENT ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── LOGIN SCREEN ── */
+  .login-wrap {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    background: var(--text);
+  }
+  .login-box {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 36px 28px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: var(--shadow-lg);
+  }
+  .login-brand {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .login-brand .brand-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--accent);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 26px;
+  }
+  .login-brand h2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+  }
+  .login-brand p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .field input, .field select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s;
+    -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--accent);
+    background: #fff;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:active { opacity: .85; transform: scale(.98); }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+  }
+  .login-error {
+    background: var(--danger-light);
+    color: var(--danger);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  /* ── SETUP SCREEN ── */
+  .setup-wrap {
+    padding: 24px 20px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .setup-wrap h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -.02em;
+  }
+  .setup-wrap p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+  }
+  .card h3 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  /* ── OPTION GRID ── */
+  .option-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .option-btn {
+    padding: 14px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    cursor: pointer;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all .18s;
+  }
+  .option-btn:hover { border-color: var(--accent); }
+  .option-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  .option-btn .opt-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+  .option-btn .opt-label { font-size: 13px; }
+
+  .name-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .name-btn {
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all .18s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .name-btn .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: all .18s;
+  }
+  .name-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  .name-btn.selected .avatar {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .report-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .report-btn {
+    padding: 16px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    cursor: pointer;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    transition: all .18s;
+  }
+  .report-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .report-btn .report-icon { font-size: 24px; margin-bottom: 6px; }
+  .report-btn .report-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .report-btn .report-sectors { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+  .report-btn.selected .report-name { color: var(--accent); }
+
+  .start-btn-wrap { margin-top: 8px; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: var(--surface2);
+    height: 4px;
+    position: sticky;
+    top: 73px;
+    z-index: 99;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width .4s ease;
+  }
+
+  /* ── CHECKLIST SCREEN ── */
+  .checklist-wrap {
+    padding: 20px 20px 120px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .sector-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 28px 0 14px;
+  }
+  .sector-header:first-child { margin-top: 8px; }
+  .sector-pill {
+    background: var(--text);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+  .sector-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .item-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .item-card.conforme { border-color: var(--accent); }
+  .item-card.nao-conforme { border-color: var(--danger); box-shadow: 0 2px 12px rgba(192,57,43,.1); }
+  .item-card.na { border-color: var(--border); opacity: .7; }
+
+  .item-main {
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .item-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: var(--surface2);
+    padding: 3px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .item-text {
+    font-size: 14px;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .item-actions {
+    display: flex;
+    gap: 0;
+    border-top: 1.5px solid var(--border);
+  }
+  .action-btn {
+    flex: 1;
+    padding: 11px 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all .18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .action-btn + .action-btn { border-left: 1.5px solid var(--border); }
+  .action-btn:active { opacity: .7; }
+  .action-btn.active-conf {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .action-btn.active-nc {
+    background: var(--danger-light);
+    color: var(--danger);
+    font-weight: 600;
+  }
+  .action-btn.active-na {
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .item-extra {
+    display: none;
+    padding: 0 16px 14px;
+    border-top: 1.5px solid var(--border);
+  }
+  .item-extra.visible { display: block; }
+  .extra-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 12px 0 6px;
+  }
+  .obs-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 72px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+  }
+  .obs-input:focus { border-color: var(--accent); }
+
+  .photo-area {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+  }
+  .photo-thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    border: 1.5px solid var(--border);
+  }
+  .photo-add {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-sm);
+    border: 1.5px dashed var(--border);
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 22px;
+    transition: all .18s;
+    position: relative;
+  }
+  .photo-add:hover { border-color: var(--accent); color: var(--accent); }
+  .photo-add input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .photo-add span { font-size: 10px; margin-top: 4px; }
+
+  .photo-item { position: relative; display: inline-block; }
+  .photo-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    background: var(--danger);
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* ── STICKY FOOTER ── */
+  .sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1.5px solid var(--border);
+    padding: 12px 20px 20px;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+  }
+  .footer-stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+  .stat-chip {
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .stat-chip.conf { background: var(--accent-light); color: var(--accent); }
+  .stat-chip.nc { background: var(--danger-light); color: var(--danger); }
+  .stat-chip.pend { background: var(--warning-light); color: var(--warning); }
+
+  .btn-generate {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 15px;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all .2s;
+  }
+  .btn-generate:disabled {
+    background: var(--surface2);
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+  .btn-generate:not(:disabled):active { opacity: .85; transform: scale(.98); }
+
+  /* ── SUCCESS SCREEN ── */
+  .success-wrap {
+    padding: 48px 24px;
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 38px;
+  }
+  .success-wrap h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .success-wrap p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+  .btn-new {
+    background: var(--surface2);
+    color: var(--text);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 200;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 36px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .modal-close {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0;
+  }
+
+  /* ── LOADING ── */
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,25,22,.85);
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    color: #fff;
+    font-size: 15px;
+  }
+  .loading-overlay.active { display: flex; }
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255,255,255,.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (min-width: 480px) {
+    .option-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── SIGNATURE MODAL ── */
+  .sig-modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    z-index: 500; display: none; align-items: flex-end; justify-content: center;
+  }
+  .sig-modal-overlay.open { display: flex; }
+  .sig-modal {
+    background: var(--surface); border-radius: 20px 20px 0 0;
+    padding: 20px 20px 32px; width: 100%; max-width: 520px;
+  }
+  .sig-modal-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
+  }
+  .sig-modal-title { font-size: 16px; font-weight: 600; }
+  .sig-modal-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .sig-canvas-wrap {
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    background: #fafafa; position: relative; touch-action: none;
+  }
+  .sig-canvas-wrap canvas { display: block; border-radius: var(--radius); cursor: crosshair; }
+  .sig-canvas-empty {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--text-muted); pointer-events: none;
+  }
+  .sig-actions { display: flex; gap: 10px; margin-top: 12px; }
+  .sig-btn-clear {
+    flex: 1; padding: 13px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    font-weight: 500; cursor: pointer; color: var(--text);
+  }
+  .sig-btn-save {
+    flex: 2; padding: 13px; border: none; border-radius: var(--radius-sm);
+    background: var(--accent); color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+
+  /* ── SIGNATURE PREVIEW BOXES ── */
+  .sig-preview-box {
+    border: 1.5px dashed var(--border); border-radius: var(--radius-sm);
+    min-height: 80px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; cursor: pointer;
+    transition: border-color .2s; overflow: hidden; background: var(--bg);
+    position: relative;
+  }
+  .sig-preview-box:hover { border-color: var(--accent); }
+  .sig-preview-box.signed { border-style: solid; border-color: var(--accent); background: var(--accent-light); }
+  .sig-preview-box img { max-width: 100%; max-height: 72px; object-fit: contain; padding: 4px; }
+  .sig-preview-hint { font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .sig-preview-hint span:first-child { font-size: 22px; }
+  .sig-signed-label { font-size: 10px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+  .sig-edit-btn {
+    position: absolute; top: 4px; right: 4px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 4px; font-size: 10px;
+    padding: 2px 6px; cursor: pointer; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <span id="loadingMsg">Gerando PDF...</span>
+</div>
+
+<!-- ════════════════════════════════ LOGIN ════════════════════════════════ -->
+<div class="screen active" id="screenLogin">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-brand">
+        <div class="brand-icon">✅</div>
+        <h2>Checklist Qualidade</h2>
+        <p>Acesso restrito — equipe interna</p>
+      </div>
+      <div class="login-error" id="loginError">Senha incorreta. Tente novamente.</div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="loginPassword" placeholder="Digite a senha" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ SETUP ════════════════════════════════ -->
+<div class="screen" id="screenSetup">
+  <div class="header">
+    <div class="header-top">
+      <span class="logo">Qualidade</span>
+      <span id="setupDate" class="header-meta"></span>
+    </div>
+    <h1>Novo Checklist</h1>
+  </div>
+  <div class="setup-wrap">
+    <h2>Olá! 👋</h2>
+    <p>Configure o preenchimento de hoje antes de começar.</p>
+
+    <div class="card">
+      <h3>Loja</h3>
+      <div class="option-grid">
+        <button class="option-btn" onclick="selectOption(this,'loja','antonio-sales')" data-group="loja" data-val="antonio-sales">
+          <span class="opt-icon">🏪</span>
+          <span class="opt-label">Antônio Sales</span>
+        </button>
+        <button class="option-btn" onclick="selectOption(this,'loja','messejana')" data-group="loja" data-val="messejana">
+          <span class="opt-icon">🏪</span>
+          <span class="opt-label">Messejana</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Estagiária</h3>
+      <input type="text" id="nomeInput" class="field" placeholder="Digite seu nome completo" oninput="state.nome = this.value.trim()" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+    </div>
+
+    <div class="card">
+      <h3>Gerente de Loja</h3>
+      <input type="text" id="gerenteInput" class="field" placeholder="Nome do gerente responsável" oninput="state.gerente = this.value.trim()" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg);color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+    </div>
+
+    <div class="card">
+      <h3>Relatório</h3>
+      <div class="report-grid">
+        <button class="report-btn" onclick="selectOption(this,'relatorio','A')" data-group="relatorio" data-val="A">
+          <div class="report-icon">❄️🥦</div>
+          <div class="report-name">Relatório A</div>
+          <div class="report-sectors">Frios · Horti<br>Área de Apoio · Loja</div>
+        </button>
+        <button class="report-btn" onclick="selectOption(this,'relatorio','B')" data-group="relatorio" data-val="B">
+          <div class="report-icon">🍖🔪</div>
+          <div class="report-name">Relatório B</div>
+          <div class="report-sectors">Gastronomia · Açougue<br>Mercearia · Loja</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="start-btn-wrap">
+      <button class="btn btn-primary" onclick="startChecklist()">Iniciar preenchimento →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ CHECKLIST ════════════════════════════════ -->
+<div class="screen" id="screenChecklist">
+  <div class="header">
+    <div class="header-top">
+      <span class="logo" id="clHeaderLoja"></span>
+      <span class="header-meta" id="clHeaderDate"></span>
+    </div>
+    <h1 id="clHeaderName"></h1>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="checklist-wrap" id="checklistContent"></div>
+  <div class="sticky-footer">
+    <div class="footer-stats">
+      <span class="stat-chip conf" id="statConf">✓ 0 Conformes</span>
+      <span class="stat-chip nc" id="statNC">✗ 0 Não conf.</span>
+      <span class="stat-chip pend" id="statPend">○ 0 Pendentes</span>
+    </div>
+    <button class="btn-generate" id="btnGenerate" onclick="generatePDF()" disabled>
+      📄 Gerar PDF
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ SUCCESS ════════════════════════════════ -->
+<div class="screen" id="screenSuccess">
+  <div class="header">
+    <div class="header-top"><span class="logo">Qualidade</span></div>
+    <h1>Tudo certo!</h1>
+  </div>
+  <div class="success-wrap">
+    <div class="success-icon">✅</div>
+    <h2>Checklist enviado!</h2>
+    <p>O PDF foi gerado com sucesso. Encaminhe para o gestor pelo WhatsApp ou e-mail.</p>
+    <button class="btn btn-primary" onclick="downloadPDFAgain()">⬇ Baixar PDF novamente</button>
+    <button class="btn-new" onclick="startNew()">Novo preenchimento</button>
+  </div>
+</div>
+
+<script>
+// ════════ CONFIG ════════
+const APP_PASSWORD = "qualidade2025";
+
+const ESTAGIARIAS = {
+  "antonio-sales": ["Ana Lívia", "Beatriz", "Camila", "Daniela"],
+  "messejana":     ["Eduarda", "Fernanda", "Gabriela", "Helena"]
+};
+
+// ════════ CHECKLIST DATA ════════
+const SETORES = {
+  FRIOS: {
+    label: "Frios", icon: "❄️",
+    items: [
+      {id:"F1", text:"O setor está limpo e organizado?"},
+      {id:"F2", text:"As câmaras estão limpas, organizadas, respeitado o limite para boa circulação do ar frio, na temperatura correta e livre de carrinhos?"},
+      {id:"F3", text:"Os equipamentos e utensílios estão limpos, organizados respeitado o limite para boa circulação e temperatura?"},
+      {id:"F4", text:"Não existem produtos em contato direto com o piso e/ou parede. Os paletes, estrados e gôndolas estão limpos?"},
+      {id:"F5", text:"Não há produtos vencidos, mofados e/ou com data crítica no setor e área de vendas?"},
+      {id:"F6", text:"Os colaboradores estão utilizando luvas, touca e com fardamento completo no atendimento ao cliente e nas áreas internas?"},
+      {id:"F7", text:"Não há presença de adornos, objetos pessoais, barba, objetos não pertinentes ao setor e/ou objetos de madeira?"},
+      {id:"F8", text:"A balança está limpa, não está sendo colocado produto em contato direto e apresenta selo do Inmetro atual com lacre?"},
+      {id:"F9", text:"Não há risco de contaminação cruzada?"},
+      {id:"F10", text:"A avaria está sendo feita diariamente? Está sendo armazenada em local adequado?"},
+      {id:"F11", text:"Os produtos fracionados presentes nas áreas internas e de vendas encontram-se etiquetados com nome do produto, validade, tara e preço corretos? Estão em embalagens separadas?"},
+      {id:"F12", text:"Os produtos estão armazenados e expostos na temperatura correta?"},
+      {id:"F13", text:"Não existem embalagens sem proteção ou em excesso no setor?"},
+      {id:"F14", text:"O controle de temperatura dos equipamentos e de higienização está sendo feito diariamente?"},
+      {id:"F15", text:"Todos os equipamentos de limpeza estão íntegros, funcionando, em uso e com o produto químico correto?"},
+      {id:"F16", text:"Não há excesso de produtos em estoque?"},
+      {id:"F17", text:"As lixeiras estão limpas, íntegras, com saco plástico e funcionando?"},
+      {id:"F18", text:"Todos os produtos em descongelamento estão identificados e dentro do prazo máximo de 72h e na temperatura adequada?"},
+      {id:"F19", text:"Não há pontos necessitando de manutenção?"},
+      {id:"F20", text:"Não há outras não conformidades?"}
+    ]
+  },
+  HORTI: {
+    label: "Horti", icon: "🥦",
+    items: [
+      {id:"H1", text:"O setor está limpo e organizado?"},
+      {id:"H2", text:"As câmaras estão limpas, organizadas, respeitado o limite para boa circulação do ar frio, na temperatura correta e livre de carrinhos?"},
+      {id:"H3", text:"Os equipamentos e utensílios estão limpos, organizados respeitado o limite para boa circulação e temperatura?"},
+      {id:"H4", text:"Não existem produtos em contato direto com o piso e/ou parede? Os paletes, estrados e gôndolas estão limpos?"},
+      {id:"H5", text:"Não há produtos vencidos, mofados e/ou com data crítica no setor e área de vendas?"},
+      {id:"H6", text:"Os colaboradores estão utilizando luvas, touca e com fardamento completo no atendimento ao cliente e nas áreas internas?"},
+      {id:"H7", text:"Não há presença de adornos, objetos pessoais, barba, objetos não pertinentes ao setor e/ou objetos de madeira?"},
+      {id:"H8", text:"A balança está limpa, não está sendo colocado produto em contato direto e apresenta selo do Inmetro atual com lacre?"},
+      {id:"H9", text:"Não há risco de contaminação cruzada?"},
+      {id:"H10", text:"A avaria está sendo feita diariamente e está sendo armazenada em local adequado?"},
+      {id:"H11", text:"Os produtos fracionados presentes nas áreas internas e de vendas encontram-se etiquetados com nome do produto, validade, tara e preço corretos? Estão em embalagens separadas?"},
+      {id:"H12", text:"Os produtos estão armazenados e expostos na temperatura correta?"},
+      {id:"H13", text:"Não existem embalagens sem proteção ou em excesso no setor?"},
+      {id:"H14", text:"O controle de temperatura dos equipamentos e de higienização está sendo feito diariamente?"},
+      {id:"H15", text:"Todos os equipamentos de limpeza estão íntegros, funcionando, em uso e com o produto químico correto?"},
+      {id:"H16", text:"Não há excesso de produtos em estoque?"},
+      {id:"H17", text:"As lixeiras estão limpas, íntegras, com saco plástico e funcionando?"},
+      {id:"H18", text:"Não há pontos necessitando de manutenção?"},
+      {id:"H19", text:"As caixas IFCO estão sendo utilizadas de forma correta? (Proibido: armazenar em câmaras que não sejam do horti, utilizar como estrado)."},
+      {id:"H20", text:"Não há outras não conformidades?"}
+    ]
+  },
+  GASTRONOMIA: {
+    label: "Gastronomia", icon: "🍽️",
+    items: [
+      {id:"G1", text:"O setor está limpo e organizado?"},
+      {id:"G2", text:"As câmaras estão limpas, organizadas, respeitado o limite para boa circulação do ar frio, na temperatura correta e livre de carrinhos?"},
+      {id:"G3", text:"Os equipamentos e utensílios estão limpos, organizados respeitado o limite para boa circulação e temperatura?"},
+      {id:"G4", text:"Não existem produtos em contato direto com o piso e/ou parede. Os paletes, estrados e gôndolas estão limpos?"},
+      {id:"G5", text:"Não há produtos vencidos, mofados e/ou com data crítica no setor e área de vendas?"},
+      {id:"G6", text:"Os colaboradores estão utilizando luvas, touca e com fardamento completo no atendimento ao cliente e nas áreas internas?"},
+      {id:"G7", text:"Não há presença de adornos, objetos pessoais, barba, objetos não pertinentes ao setor e/ou objetos de madeira?"},
+      {id:"G8", text:"A balança está limpa, não está sendo colocado produto em contato direto e apresenta selo do Inmetro atual com lacre?"},
+      {id:"G9", text:"Não há risco de contaminação cruzada?"},
+      {id:"G10", text:"Os produtos fracionados presentes nas áreas internas e de vendas encontram-se etiquetados com nome do produto, validade, tara e preço corretos? Estão em embalagens separadas? Não existe mais de unidade do mesmo produto e marca abertas?"},
+      {id:"G11", text:"A avaria está sendo feita diariamente e está sendo armazenada em local adequado?"},
+      {id:"G12", text:"Os produtos estão armazenados e expostos na temperatura correta?"},
+      {id:"G13", text:"Não existem embalagens sem proteção ou em excesso no setor?"},
+      {id:"G14", text:"O controle de temperatura dos equipamentos e de higienização está sendo feito diariamente?"},
+      {id:"G15", text:"Todos os equipamentos de limpeza estão íntegros, funcionando, em uso e com o produto químico correto?"},
+      {id:"G16", text:"Não há excesso de produtos em estoque?"},
+      {id:"G17", text:"As lixeiras estão limpas, íntegras, com saco plástico e funcionando?"},
+      {id:"G18", text:"Todos os produtos em descongelamento estão identificados e dentro do prazo máximo de 72h e na temperatura adequada?"},
+      {id:"G19", text:"Os produtos estão sendo reaproveitados após exposição?"},
+      {id:"G20", text:"Está sendo retirado amostra do self service e do sushi? Está sendo identificado corretamente?"},
+      {id:"G21", text:"Existem pães em temperatura ambiente sem ser telados? Não existe acúmulo de pães secos? Estão etiquetados?"},
+      {id:"G22", text:"Os alimentos produzidos são mantidos em condições de tempo e de temperatura que não favoreçam a multiplicação microbiana?"},
+      {id:"G23", text:"A gordura utilizada para fritar salgados, batatas e o sushi está sendo devidamente descartada, anotado em planilha conforme a troca? A fritadeira do sushi está sendo utilizada apenas para fritar sushi?"},
+      {id:"G24", text:"As cubas e isobox estão chegando e sendo enviados de volta para o CD higienizados?"},
+      {id:"G25", text:"O arroz do sushi está sendo preparado e consumido diariamente? Está em temperatura adequada?"},
+      {id:"G26", text:"O sushi está na temperatura correta? (frio até 5°C e quente acima de 60°C)"},
+      {id:"G27", text:"Os produtos (sushi, salgados, self service, etc) estão identificados, armazenados e expostos na temperatura correta?"},
+      {id:"G28", text:"Não há pontos necessitando de manutenção?"},
+      {id:"G29", text:"Não há outras não conformidades?"}
+    ]
+  },
+  ACOUGUE: {
+    label: "Açougue", icon: "🔪",
+    items: [
+      {id:"A1", text:"O setor está limpo e organizado?"},
+      {id:"A2", text:"As câmaras estão limpas, organizadas, respeitado o limite para boa circulação do ar frio, na temperatura correta e livre de carrinhos?"},
+      {id:"A3", text:"Os equipamentos e utensílios estão limpos, organizados respeitado o limite para boa circulação e temperatura?"},
+      {id:"A4", text:"Não existem produtos em contato direto com o piso e/ou parede. Os paletes, estrados e gôndolas estão limpos?"},
+      {id:"A5", text:"Não há produtos vencidos, mofados e/ou com data crítica no setor e área de vendas?"},
+      {id:"A6", text:"Os colaboradores estão utilizando luvas, touca e com fardamento completo no atendimento ao cliente e nas áreas internas?"},
+      {id:"A7", text:"Não há presença de adornos, objetos pessoais e barba ou algo que não seja permitido na legislação no setor?"},
+      {id:"A8", text:"A balança está limpa, não está sendo colocado produto em contato direto e apresenta selo do Inmetro atual com lacre?"},
+      {id:"A9", text:"Não há risco de contaminação cruzada?"},
+      {id:"A10", text:"A avaria está sendo feita diariamente? Está sendo armazenada em local adequado?"},
+      {id:"A11", text:"Os produtos fracionados presentes nas áreas internas e de vendas encontram-se etiquetados com nome do produto, validade, tara e preço corretos? Estão em embalagens separadas?"},
+      {id:"A12", text:"Os produtos estão armazenados e expostos na temperatura correta?"},
+      {id:"A13", text:"Não existem embalagens sem proteção ou em excesso no setor?"},
+      {id:"A14", text:"O controle de temperatura dos equipamentos e de higienização está sendo feito diariamente?"},
+      {id:"A15", text:"Todos os equipamentos de limpeza estão íntegros, funcionando, em uso e com o produto químico correto?"},
+      {id:"A16", text:"Não há excesso de produtos em estoque?"},
+      {id:"A17", text:"As lixeiras estão limpas, íntegras, com saco plástico e funcionando?"},
+      {id:"A18", text:"Todos os produtos em descongelamento estão identificados e dentro do prazo máximo de 72h e na temperatura adequada?"},
+      {id:"A19", text:"O fígado está sendo comercializado congelado?"},
+      {id:"A20", text:"Não existe carne moída, linguiça, salsicha e frango no balcão de atendimento ou armazenada em gamelas? Não existe carne sendo reutilizada ou remoída?"},
+      {id:"A21", text:"Na câmara as peças de carne estão penduradas por ganchos livres de ferrugem e sem cordões?"},
+      {id:"A22", text:"Não há pontos necessitando de manutenção?"},
+      {id:"A23", text:"Não há outras não conformidades?"}
+    ]
+  },
+  MERCEARIA: {
+    label: "Mercearia", icon: "🛒",
+    items: [
+      {id:"M1", text:"O setor está limpo e organizado?"},
+      {id:"M2", text:"As câmaras estão limpas, organizadas, respeitado o limite para boa circulação do ar frio, na temperatura correta e livre de carrinhos?"},
+      {id:"M3", text:"Os equipamentos e utensílios estão limpos, organizados respeitado o limite para boa circulação e temperatura?"},
+      {id:"M4", text:"Não existem produtos em contato direto com o piso e/ou parede. Os paletes, estrados e gôndolas estão limpos?"},
+      {id:"M5", text:"Os colaboradores estão utilizando touca ao entrar nas áreas internas onde há necessidade?"},
+      {id:"M6", text:"A avaria está sendo feita diariamente e está sendo armazenada em local adequado?"},
+      {id:"M7", text:"O controle de temperatura dos equipamentos e de higienização está sendo feito diariamente?"},
+      {id:"M8", text:"A área está livre de objetos em desuso e/ou produtos reversa?"},
+      {id:"M9", text:"As lixeiras estão limpas, íntegras, com saco plástico e funcionando?"},
+      {id:"M10", text:"Há pontos necessitando de manutenção?"},
+      {id:"M11", text:"Não há outras não conformidades?"}
+    ]
+  },
+  APOIO: {
+    label: "Área de Apoio", icon: "🏭",
+    items: [
+      {id:"AP1", text:"O setor está limpo e organizado?"},
+      {id:"AP2", text:"Não existem produtos em contato direto com o piso e/ou parede. Os paletes e estrados estão limpos?"},
+      {id:"AP3", text:"Não há produtos vencidos, com data crítica ou impróprios no setor?"},
+      {id:"AP4", text:"O MTR está sendo feito de acordo com a frequência do recolhimento pela empresa?"},
+      {id:"AP5", text:"A temperatura dos produtos perecíveis são verificadas nas etapas de recepção e estão adequadas sendo anotadas em planilha?"},
+      {id:"AP6", text:"A recepção de matérias-primas, produtos, ingredientes e embalagens é realizada em área protegida e limpa e a operação de descarga/conferência é eficiente?"},
+      {id:"AP7", text:"São verificadas as condições higiênicas do transporte e dos entregadores?"},
+      {id:"AP8", text:"A área está livre de objetos em desuso? Não há caixas de papelão e plástico vazias fora da máquina de prensa?"},
+      {id:"AP9", text:"Os produtos que tem acordo comercial para devolução com fornecedor estão devidamente organizados e em local adequado?"},
+      {id:"AP10", text:"As embalagens são armazenadas em local limpo e organizado e protegidas de poeira e pragas? Os produtos da reversa estão devidamente organizados?"},
+      {id:"AP11", text:"As lixeiras estão limpas, íntegras, com saco plástico e funcionando?"},
+      {id:"AP12", text:"Há pontos necessitando de manutenção?"},
+      {id:"AP13", text:"Não há outras não conformidades?"}
+    ]
+  },
+  LOJA: {
+    label: "Loja", icon: "🏬",
+    items: [
+      {id:"L1", text:"O piso da loja está limpo? Não há pisos quebrados?"},
+      {id:"L2", text:"Os banheiros de colaboradores e de clientes estão limpos, organizados, abastecidos e funcionando? As planilhas do banheiro estão sendo preenchidas?"},
+      {id:"L3", text:"O bebedouro está limpo, com planilha sendo preenchida e troca do filtro atualizada?"},
+      {id:"L4", text:"A casa do lixo está limpa, com ponto de água, luz e ralo funcionando? Os tambores estão limpos e íntegros?"},
+      {id:"L5", text:"O refeitório encontra-se limpo e organizado? Utensílios (geladeira, micro-ondas e etc.) limpos?"},
+      {id:"L6", text:"Os equipamentos de limpeza do refeitório estão funcionando e abastecidos com os produtos de limpeza corretos? A esponja está sendo trocada com frequência?"},
+      {id:"L7", text:"As lixeiras estão limpas, íntegras, com saco plástico e funcionando?"},
+      {id:"L8", text:"Todos os documentos obrigatórios estão dispostos na frente de loja e visíveis para o cliente? Todos os documentos obrigatórios estão na pasta de fiscalização?"},
+      {id:"L9", text:"Há pontos necessitando de manutenção?"},
+      {id:"L10", text:"Não há produtos sem precificação?"},
+      {id:"L11", text:"Não há outras não conformidades?"}
+    ]
+  }
+};
+
+const RELATORIOS = {
+  A: ["FRIOS","HORTI","APOIO","LOJA"],
+  B: ["GASTRONOMIA","ACOUGUE","MERCEARIA","LOJA"]
+};
+
+// ════════ STATE ════════
+let state = {
+  loja: null,
+  nome: null,
+  gerente: null,
+  relatorio: null,
+  respostas: {}, // id -> { status: 'conforme'|'nao-conforme'|'na', obs: '', photos: [] }
+  lastPDFBlob: null
+};
+
+// ════════ HELPERS ════════
+function today() {
+  return new Date().toLocaleDateString('pt-BR', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+}
+function todayISO() {
+  return new Date().toISOString().slice(0,10);
+}
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ════════ LOGIN ════════
+document.getElementById('loginPassword').addEventListener('keydown', e => {
+  if(e.key === 'Enter') doLogin();
+});
+function doLogin() {
+  const pw = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  if(pw === APP_PASSWORD) {
+    err.style.display = 'none';
+    document.getElementById('setupDate').textContent = today();
+    showScreen('screenSetup');
+  } else {
+    err.style.display = 'block';
+    document.getElementById('loginPassword').value = '';
+  }
+}
+
+// ════════ SETUP ════════
+function selectOption(btn, group, val) {
+  document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state[group === 'relatorio' ? 'relatorio' : group] = val;
+
+}
+
+
+function startChecklist() {
+  state.nome = (document.getElementById('nomeInput').value || '').trim();
+  if(!state.loja) return alert('Selecione a loja.');
+  if(!state.nome) return alert('Digite seu nome.');
+  state.gerente = (document.getElementById('gerenteInput').value || '').trim();
+  if(!state.gerente) return alert('Digite o nome do gerente de loja.');
+  if(!state.relatorio) return alert('Selecione o relatório.');
+  state.gerente = (document.getElementById('gerenteInput').value || '').trim();
+  state.respostas = {};
+  buildChecklist();
+
+  showScreen('screenChecklist');
+}
+
+// ════════ CHECKLIST ════════
+function buildChecklist() {
+  const wrap = document.getElementById('checklistContent');
+  const lojaLabel = state.loja === 'antonio-sales' ? 'Antônio Sales' : 'Messejana';
+  document.getElementById('clHeaderLoja').textContent = lojaLabel;
+  document.getElementById('clHeaderDate').textContent = todayISO();
+  document.getElementById('clHeaderName').textContent = state.nome + ' · Relatório ' + state.relatorio;
+  wrap.innerHTML = '';
+
+  const setores = RELATORIOS[state.relatorio];
+  setores.forEach(sKey => {
+    const setor = SETORES[sKey];
+    wrap.insertAdjacentHTML('beforeend', `
+      <div class="sector-header">
+        <span class="sector-pill">${setor.icon} ${setor.label}</span>
+        <span class="sector-count">${setor.items.length} itens</span>
+      </div>`);
+    setor.items.forEach(item => {
+      state.respostas[item.id] = { status: null, obs: '', photos: [] };
+      wrap.insertAdjacentHTML('beforeend', buildItemHTML(item));
+    });
+  });
+  // Signature block
+  wrap.insertAdjacentHTML('beforeend', `
+    <div class="sector-header" style="margin-top:32px;">
+      <span class="sector-pill" style="background:#7A7770;">✍️ Assinatura</span>
+    </div>
+    <div class="item-card" id="card-assinatura" style="padding:20px 16px;">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">
+        Confirmo que este relatório foi apresentado ao gerente de loja responsável.
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Estagiária · ${state.nome}</div>
+          <div class="sig-preview-box" id="sig-box-estagiaria" onclick="openSigModal('estagiaria')">
+            <div class="sig-preview-hint"><span>✍️</span><span>Toque para assinar</span></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Gerente · ${state.gerente}</div>
+          <div class="sig-preview-box" id="sig-box-gerente" onclick="openSigModal('gerente')">
+            <div class="sig-preview-hint"><span>✍️</span><span>Toque para assinar</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `);
+  updateStats();
+}
+
+function buildItemHTML(item) {
+  return `
+    <div class="item-card" id="card-${item.id}">
+      <div class="item-main">
+        <span class="item-code">${item.id}</span>
+        <span class="item-text">${item.text}</span>
+      </div>
+      <div class="item-actions">
+        <button class="action-btn" id="btn-conf-${item.id}" onclick="setStatus('${item.id}','conforme')">✓ Conforme</button>
+        <button class="action-btn" id="btn-nc-${item.id}" onclick="setStatus('${item.id}','nao-conforme')">✗ Não conf.</button>
+        <button class="action-btn" id="btn-na-${item.id}" onclick="setStatus('${item.id}','na')">— N/A</button>
+      </div>
+      <div class="item-extra" id="extra-${item.id}">
+        <div class="extra-label">Observação</div>
+        <textarea class="obs-input" placeholder="Descreva a não conformidade..." oninput="saveObs('${item.id}',this.value)"></textarea>
+        <div class="extra-label">Fotos</div>
+        <div class="photo-area" id="photos-${item.id}">
+          <label class="photo-add">
+            <input type="file" accept="image/*" capture="environment" multiple onchange="addPhotos('${item.id}',this)">
+            <span>📷</span>
+            <span>Adicionar</span>
+          </label>
+        </div>
+      </div>
+    </div>`;
+}
+
+function setStatus(id, status) {
+  state.respostas[id].status = status;
+  const card = document.getElementById(`card-${id}`);
+  card.classList.remove('conforme','nao-conforme','na');
+  ['conf','nc','na'].forEach(k => {
+    const b = document.getElementById(`btn-${{conf:'conf',nc:'nc',na:'na'}[k]}-${id}`) ||
+              document.getElementById(`btn-${k === 'conf' ? 'conf' : k === 'nc' ? 'nc' : 'na'}-${id}`);
+  });
+  document.getElementById(`btn-conf-${id}`).classList.remove('active-conf','active-nc','active-na');
+  document.getElementById(`btn-nc-${id}`).classList.remove('active-conf','active-nc','active-na');
+  document.getElementById(`btn-na-${id}`).classList.remove('active-conf','active-nc','active-na');
+  const extra = document.getElementById(`extra-${id}`);
+
+  if(status === 'conforme') {
+    card.classList.add('conforme');
+    document.getElementById(`btn-conf-${id}`).classList.add('active-conf');
+    extra.classList.remove('visible');
+  } else if(status === 'nao-conforme') {
+    card.classList.add('nao-conforme');
+    document.getElementById(`btn-nc-${id}`).classList.add('active-nc');
+    extra.classList.add('visible');
+  } else {
+    card.classList.add('na');
+    document.getElementById(`btn-na-${id}`).classList.add('active-na');
+    extra.classList.remove('visible');
+  }
+
+function saveObs(id, val) {
+  state.respostas[id].obs = val;
+}
+
+function addPhotos(id, input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.respostas[id].photos.push(e.target.result);
+      renderPhotos(id);
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function removePhoto(id, idx) {
+  state.respostas[id].photos.splice(idx, 1);
+  renderPhotos(id);
+}
+
+function renderPhotos(id) {
+  const area = document.getElementById(`photos-${id}`);
+  const photos = state.respostas[id].photos;
+  area.innerHTML = photos.map((src, i) => `
+    <div class="photo-item">
+      <img class="photo-thumb" src="${src}">
+      <button class="photo-remove" onclick="removePhoto('${id}',${i})">×</button>
+    </div>`).join('') + `
+    <label class="photo-add">
+      <input type="file" accept="image/*" capture="environment" multiple onchange="addPhotos('${id}',this)">
+      <span>📷</span><span>Adicionar</span>
+    </label>`;
+}
+
+function updateStats() {
+  const vals = Object.values(state.respostas);
+  const conf = vals.filter(v => v.status === 'conforme').length;
+  const nc = vals.filter(v => v.status === 'nao-conforme').length;
+  const pend = vals.filter(v => v.status === null).length;
+  const total = vals.length;
+  document.getElementById('statConf').textContent = `✓ ${conf} Conformes`;
+  document.getElementById('statNC').textContent = `✗ ${nc} Não conf.`;
+  document.getElementById('statPend').textContent = `○ ${pend} Pendentes`;
+  const pct = Math.round(((conf + nc + vals.filter(v=>v.status==='na').length) / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  const btn = document.getElementById('btnGenerate');
+  btn.disabled = pend > 0;
+  btn.textContent = pend > 0 ? `📄 Gerar PDF (${pend} pendentes)` : '📄 Gerar PDF';
+}
+
+// ════════ PDF (print-based, sem dependências externas) ════════
+function generatePDF() {
+  const lojaLabel = state.loja === 'antonio-sales' ? 'Antônio Sales' : 'Messejana';
+  const dateStr = new Date().toLocaleDateString('pt-BR', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+
+  const vals = Object.values(state.respostas);
+  const conf = vals.filter(v => v.status === 'conforme').length;
+  const nc   = vals.filter(v => v.status === 'nao-conforme').length;
+  const na   = vals.filter(v => v.status === 'na').length;
+  const total = vals.length;
+  const pct  = Math.round((conf / (total - na || 1)) * 100);
+
+  const setores = RELATORIOS[state.relatorio];
+
+  let sectorsHTML = '';
+  for(const sKey of setores) {
+    const setor = SETORES[sKey];
+    let itemsHTML = '';
+    for(const item of setor.items) {
+      const r = state.respostas[item.id];
+      if(!r) continue;
+      const statusClass = r.status === 'conforme' ? 'conf' : r.status === 'nao-conforme' ? 'nc' : 'na';
+      const statusLabel = r.status === 'conforme' ? '✓ CONFORME' : r.status === 'nao-conforme' ? '✗ NÃO CONF.' : '— N/A';
+      const photosHTML = (r.status === 'nao-conforme' && r.photos.length > 0)
+        ? `<div class="photos-label">📷 Registros fotográficos:</div>
+           <div class="photos-grid">${r.photos.map(src => `<img src="${src}" class="photo-img">`).join('')}</div>`
+        : '';
+      const obsHTML = (r.status === 'nao-conforme' && r.obs)
+        ? `<div class="item-obs">📝 ${r.obs}</div>` : '';
+      itemsHTML += `
+        <div class="item item-${statusClass}">
+          <div class="item-row">
+            <span class="item-code">${item.id}</span>
+            <span class="item-text">${item.text}</span>
+            <span class="badge badge-${statusClass}">${statusLabel}</span>
+          </div>
+          ${obsHTML}${photosHTML}
+        </div>`;
+    }
+    sectorsHTML += `
+      <div class="sector">
+        <div class="sector-title">${setor.icon} ${setor.label.toUpperCase()}</div>
+        ${itemsHTML}
+      </div>`;
+  }
+
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Checklist · ${lojaLabel} · ${state.nome}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', Arial, sans-serif; font-size: 11px; color: #1A1916; background: #fff; }
+  .page { padding: 20mm 15mm; }
+
+  /* HEADER */
+  .header { background: #1A1916; color: #fff; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .header h1 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .header-meta { font-size: 10px; color: #aaa; }
+
+  /* SUMMARY */
+  .summary { display: flex; gap: 10px; margin-bottom: 18px; }
+  .sum-box { flex: 1; border-radius: 6px; padding: 10px 12px; }
+  .sum-box.pct { background: #E8F4EE; }
+  .sum-box.conf { background: #E8F4EE; }
+  .sum-box.nc { background: #FDECEA; }
+  .sum-box.na { background: #F5F4F0; }
+  .sum-val { font-size: 18px; font-weight: 700; }
+  .sum-val.green { color: #1A6B3C; }
+  .sum-val.red { color: #C0392B; }
+  .sum-val.gray { color: #7A7770; }
+  .sum-label { font-size: 9px; color: #7A7770; margin-top: 2px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* SECTORS */
+  .sector { margin-bottom: 16px; }
+  .sector-title {
+    background: #1A1916; color: #fff; font-size: 10px; font-weight: 700;
+    letter-spacing: .08em; padding: 6px 10px; border-radius: 5px; margin-bottom: 4px;
+  }
+
+  /* ITEMS */
+  .item { border-radius: 5px; padding: 8px 10px; margin-bottom: 3px; border-left: 3px solid transparent; }
+  .item-conf { background: #F0FAF4; border-left-color: #1A6B3C; }
+  .item-nc   { background: #FDECEA; border-left-color: #C0392B; }
+  .item-na   { background: #F5F4F0; border-left-color: #ccc; opacity: .75; }
+  .item-row  { display: flex; align-items: flex-start; gap: 8px; }
+  .item-code { font-family: monospace; font-size: 9px; background: rgba(0,0,0,.07); padding: 2px 5px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+  .item-text { flex: 1; font-size: 10px; line-height: 1.5; }
+  .badge { font-size: 8px; font-weight: 700; padding: 2px 7px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+  .badge-conf { background: #1A6B3C; color: #fff; }
+  .badge-nc   { background: #C0392B; color: #fff; }
+  .badge-na   { background: #ccc; color: #555; }
+  .item-obs   { font-size: 9px; color: #7A3020; margin-top: 6px; font-style: italic; padding-left: 4px; }
+  .photos-label { font-size: 9px; font-weight: 600; color: #C0392B; margin-top: 8px; margin-bottom: 4px; }
+  .photos-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .photo-img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #E0DDD6; }
+
+  /* FOOTER */
+  .footer { margin-top: 20px; border-top: 1px solid #E0DDD6; padding-top: 8px; font-size: 9px; color: #aaa; display: flex; justify-content: space-between; }
+
+  .sig-section { margin-top: 24px; border: 1.5px solid #E0DDD6; border-radius: 8px; padding: 16px; }
+  .sig-title { font-size: 12px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  .sig-note { font-size: 10px; color: #7A7770; margin-bottom: 16px; }
+  .sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 12px; }
+  .sig-box { text-align: center; }
+  .sig-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #7A7770; margin-bottom: 8px; }
+  .sig-img-wrap { height: 70px; display: flex; align-items: center; justify-content: center; border: 1px solid #E0DDD6; border-radius: 6px; margin-bottom: 6px; background: #fafafa; }
+  .sig-img { max-height: 64px; max-width: 100%; object-fit: contain; }
+  .sig-line { width: 100%; height: 60px; border-bottom: 1.5px solid #1A1916; }
+  .sig-name { font-size: 11px; font-weight: 600; }
+  .sig-role { font-size: 9px; color: #7A7770; }
+  .sig-date { font-size: 10px; color: #7A7770; text-align: right; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .sector-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .item { page-break-inside: avoid; }
+    .sector { page-break-inside: avoid; }
+    .no-print { display: none !important; }
+  }
+
+  /* ── SIGNATURE MODAL ── */
+  .sig-modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    z-index: 500; display: none; align-items: flex-end; justify-content: center;
+  }
+  .sig-modal-overlay.open { display: flex; }
+  .sig-modal {
+    background: var(--surface); border-radius: 20px 20px 0 0;
+    padding: 20px 20px 32px; width: 100%; max-width: 520px;
+  }
+  .sig-modal-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
+  }
+  .sig-modal-title { font-size: 16px; font-weight: 600; }
+  .sig-modal-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .sig-canvas-wrap {
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    background: #fafafa; position: relative; touch-action: none;
+  }
+  .sig-canvas-wrap canvas { display: block; border-radius: var(--radius); cursor: crosshair; }
+  .sig-canvas-empty {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--text-muted); pointer-events: none;
+  }
+  .sig-actions { display: flex; gap: 10px; margin-top: 12px; }
+  .sig-btn-clear {
+    flex: 1; padding: 13px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    font-weight: 500; cursor: pointer; color: var(--text);
+  }
+  .sig-btn-save {
+    flex: 2; padding: 13px; border: none; border-radius: var(--radius-sm);
+    background: var(--accent); color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+
+  /* ── SIGNATURE PREVIEW BOXES ── */
+  .sig-preview-box {
+    border: 1.5px dashed var(--border); border-radius: var(--radius-sm);
+    min-height: 80px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; cursor: pointer;
+    transition: border-color .2s; overflow: hidden; background: var(--bg);
+    position: relative;
+  }
+  .sig-preview-box:hover { border-color: var(--accent); }
+  .sig-preview-box.signed { border-style: solid; border-color: var(--accent); background: var(--accent-light); }
+  .sig-preview-box img { max-width: 100%; max-height: 72px; object-fit: contain; padding: 4px; }
+  .sig-preview-hint { font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .sig-preview-hint span:first-child { font-size: 22px; }
+  .sig-signed-label { font-size: 10px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+  .sig-edit-btn {
+    position: absolute; top: 4px; right: 4px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 4px; font-size: 10px;
+    padding: 2px 6px; cursor: pointer; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>Checklist de Conformidade · Relatório ${state.relatorio}</h1>
+    <div class="header-meta">Loja: ${lojaLabel} &nbsp;|&nbsp; Estagiária: ${state.nome} &nbsp;|&nbsp; Gerente: ${state.gerente || '—'} &nbsp;|&nbsp; ${dateStr}</div>
+  </div>
+
+  <div class="summary">
+    <div class="sum-box pct">
+      <div class="sum-val green">${pct}%</div>
+      <div class="sum-label">Conformidade</div>
+    </div>
+    <div class="sum-box conf">
+      <div class="sum-val green">${conf}</div>
+      <div class="sum-label">Conformes</div>
+    </div>
+    <div class="sum-box nc">
+      <div class="sum-val red">${nc}</div>
+      <div class="sum-label">Não conformidades</div>
+    </div>
+    <div class="sum-box na">
+      <div class="sum-val gray">${na}</div>
+      <div class="sum-label">N/A</div>
+    </div>
+  </div>
+
+  ${sectorsHTML}
+
+  <div class="sig-section">
+    <div class="sig-title">✍️ Informações Finais — Confirmação de Apresentação ao Gerente</div>
+    <p class="sig-note">Declaro que este relatório foi apresentado ao gerente de loja responsável.</p>
+    <div class="sig-grid">
+      <div class="sig-box">
+        <div class="sig-label">Assinatura Qualidade</div>
+        <div class="sig-img-wrap">${sigData.estagiaria ? '<img src="' + sigData.estagiaria + '" class="sig-img">' : '<div class="sig-line"></div>'}</div>
+        <div class="sig-name">${state.nome}</div>
+        <div class="sig-role">Estagiária</div>
+      </div>
+      <div class="sig-box">
+        <div class="sig-label">Assinatura do Gestor</div>
+        <div class="sig-img-wrap">${sigData.gerente ? '<img src="' + sigData.gerente + '" class="sig-img">' : '<div class="sig-line"></div>'}</div>
+        <div class="sig-name">${state.gerente || '_______________________'}</div>
+        <div class="sig-role">Gerente de Loja</div>
+      </div>
+    </div>
+    <div class="sig-date">Data: ${new Date().toLocaleDateString('pt-BR')}</div>
+  </div>
+
+  <div class="footer">
+    <span>Checklist de Conformidade · ${lojaLabel} · ${state.nome}</span>
+    <span>${new Date().toLocaleDateString('pt-BR')}</span>
+  </div>
+
+  <div class="no-print" style="text-align:center; margin-top:24px;">
+    <button onclick="window.print()" style="padding:14px 32px; background:#1A6B3C; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;">
+      📄 Salvar como PDF / Imprimir
+    </button>
+    <p style="margin-top:10px; font-size:12px; color:#7A7770;">
+      No celular: toque em "Salvar como PDF" na opção de impressão.<br>
+      No computador: selecione "Salvar como PDF" na impressora.
+    </p>
+  </div>
+</div>
+
+<!-- SIGNATURE MODAL -->
+<div class="sig-modal-overlay" id="sigModalOverlay">
+  <div class="sig-modal">
+    <div class="sig-modal-header">
+      <span class="sig-modal-title" id="sigModalTitle">Assinatura</span>
+      <button onclick="closeSigModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-muted);">×</button>
+    </div>
+    <div class="sig-modal-subtitle" id="sigModalSubtitle">Assine com o dedo na área abaixo</div>
+    <div class="sig-canvas-wrap" id="sigCanvasWrap">
+      <canvas id="sigCanvas"></canvas>
+      <div class="sig-canvas-empty" id="sigCanvasEmpty">✍️ Assine aqui</div>
+    </div>
+    <div class="sig-actions">
+      <button class="sig-btn-clear" onclick="clearSigCanvas()">🗑 Limpar</button>
+      <button class="sig-btn-save" onclick="saveSig()">Confirmar assinatura</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>`;
+
+  state.lastHTML = html;
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const w = window.open(url, '_blank');
+  if(!w) {
+    // fallback: direct download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `checklist_${state.loja}_${state.relatorio}_${todayISO()}.html`;
+    a.click();
+  }
+  showScreen('screenSuccess');
+}
+
+function downloadPDFAgain() {
+  if(!state.lastHTML) return;
+  const blob = new Blob([state.lastHTML], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const w = window.open(url, '_blank');
+  if(!w) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `checklist_${state.loja}_${state.relatorio}_${todayISO()}.html`;
+    a.click();
+  }
+}
+
+function startNew() {
+  state = { loja: null, nome: null, relatorio: null, respostas: {}, lastHTML: null };
+  document.getElementById('nomeInput').value = '';
+  document.getElementById('gerenteInput').value = '';
+  sigData.estagiaria = null;
+  sigData.gerente = null;
+  showScreen('screenSetup');
+}
+
+// ════════ SIGNATURE PAD ════════
+let sigCtx = null, sigDrawing = false, sigTarget = null, sigHasData = { estagiaria: false, gerente: false };
+const sigData = { estagiaria: null, gerente: null };
+
+function openSigModal(who) {
+  sigTarget = who;
+  const overlay = document.getElementById('sigModalOverlay');
+  const title = document.getElementById('sigModalTitle');
+  const subtitle = document.getElementById('sigModalSubtitle');
+  title.textContent = who === 'estagiaria' ? `Assinatura — ${state.nome}` : `Assinatura — ${state.gerente}`;
+  subtitle.textContent = 'Assine com o dedo na área abaixo';
+  overlay.classList.add('open');
+  initSigCanvas();
+  // If already signed, pre-load
+  if(sigData[who]) {
+    const img = new Image();
+    img.onload = () => { sigCtx.drawImage(img, 0, 0); document.getElementById('sigCanvasEmpty').style.display='none'; };
+    img.src = sigData[who];
+  }
+}
+
+function closeSigModal() {
+  document.getElementById('sigModalOverlay').classList.remove('open');
+  sigTarget = null;
+}
+
+function initSigCanvas() {
+  const wrap = document.getElementById('sigCanvasWrap');
+  const canvas = document.getElementById('sigCanvas');
+  const w = wrap.clientWidth;
+  const h = Math.round(w * 0.38);
+  canvas.width = w;
+  canvas.height = h;
+  sigCtx = canvas.getContext('2d');
+  sigCtx.clearRect(0, 0, w, h);
+  sigCtx.strokeStyle = '#1A1916';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  document.getElementById('sigCanvasEmpty').style.display = 'flex';
+  setupSigEvents(canvas);
+}
+
+function setupSigEvents(canvas) {
+  // Remove old listeners by cloning
+  const newCanvas = canvas.cloneNode(true);
+  canvas.parentNode.replaceChild(newCanvas, canvas);
+  const c = document.getElementById('sigCanvas');
+  sigCtx = c.getContext('2d');
+  sigCtx.strokeStyle = '#1A1916';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+
+  function getPos(e) {
+    const r = c.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return { x: src.clientX - r.left, y: src.clientY - r.top };
+  }
+  function start(e) {
+    e.preventDefault();
+    sigDrawing = true;
+    const p = getPos(e);
+    sigCtx.beginPath();
+    sigCtx.moveTo(p.x, p.y);
+    document.getElementById('sigCanvasEmpty').style.display = 'none';
+  }
+  function move(e) {
+    e.preventDefault();
+    if(!sigDrawing) return;
+    const p = getPos(e);
+    sigCtx.lineTo(p.x, p.y);
+    sigCtx.stroke();
+  }
+  function end(e) { e.preventDefault(); sigDrawing = false; }
+
+  c.addEventListener('mousedown', start);
+  c.addEventListener('mousemove', move);
+  c.addEventListener('mouseup', end);
+  c.addEventListener('touchstart', start, { passive: false });
+  c.addEventListener('touchmove', move, { passive: false });
+  c.addEventListener('touchend', end, { passive: false });
+}
+
+function clearSigCanvas() {
+  const c = document.getElementById('sigCanvas');
+  sigCtx.clearRect(0, 0, c.width, c.height);
+  document.getElementById('sigCanvasEmpty').style.display = 'flex';
+}
+
+function saveSig() {
+  const c = document.getElementById('sigCanvas');
+  const empty = document.getElementById('sigCanvasEmpty').style.display !== 'none';
+  if(empty) { alert('Por favor, assine antes de confirmar.'); return; }
+  const dataUrl = c.toDataURL('image/png');
+  sigData[sigTarget] = dataUrl;
+  // Update preview box
+  const box = document.getElementById('sig-box-' + sigTarget);
+  if(box) {
+    box.classList.add('signed');
+    box.innerHTML = \`<img src="\${dataUrl}"><button class="sig-edit-btn" onclick="event.stopPropagation();openSigModal('\${sigTarget}')">Refazer</button><div class="sig-signed-label">✓ Assinado</div>\`;
+  }
+  closeSigModal();
+}
+</script>
+
+<!-- SIGNATURE MODAL -->
+<div class="sig-modal-overlay" id="sigModalOverlay">
+  <div class="sig-modal">
+    <div class="sig-modal-header">
+      <span class="sig-modal-title" id="sigModalTitle">Assinatura</span>
+      <button onclick="closeSigModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-muted);">×</button>
+    </div>
+    <div class="sig-modal-subtitle" id="sigModalSubtitle">Assine com o dedo na área abaixo</div>
+    <div class="sig-canvas-wrap" id="sigCanvasWrap">
+      <canvas id="sigCanvas"></canvas>
+      <div class="sig-canvas-empty" id="sigCanvasEmpty">✍️ Assine aqui</div>
+    </div>
+    <div class="sig-actions">
+      <button class="sig-btn-clear" onclick="clearSigCanvas()">🗑 Limpar</button>
+      <button class="sig-btn-save" onclick="saveSig()">Confirmar assinatura</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
