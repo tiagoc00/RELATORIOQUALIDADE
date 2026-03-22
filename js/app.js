@@ -55,7 +55,6 @@ class App {
     }
 
     container.innerHTML = html;
-    window.scrollTo(0, 0);
     
     // Attach keyboard event for login
     if (this.currentScreen === 'screenLogin') {
@@ -67,6 +66,7 @@ class App {
   showScreen(name) {
     this.currentScreen = name;
     this.render();
+    window.scrollTo(0, 0);
   }
 
   async doLogin() {
