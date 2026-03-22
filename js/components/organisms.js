@@ -52,7 +52,7 @@ export const ChecklistItemCard = (item, response, callbacks) => {
         <div class="photo-area" id="photos-${id}">
           ${photosHTML}
           <label class="photo-add">
-            <input type="file" accept="image/*" capture="environment" multiple onchange="${callbacks.onPhotoAdd}('${id}', this)">
+            <input type="file" accept="image/*" multiple onchange="${callbacks.onPhotoAdd}('${id}', this)">
             <span>📷</span>
             <span>Adicionar</span>
           </label>
