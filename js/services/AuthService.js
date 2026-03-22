@@ -1,9 +1,12 @@
+import { SecurityUtils } from './SecurityUtils.js';
+
 export class AuthService {
-  constructor(password) {
-    this.password = password;
+  constructor(passwordHash) {
+    this.passwordHash = passwordHash;
   }
 
-  login(inputPassword) {
-    return inputPassword === this.password;
+  async login(inputPassword) {
+    const inputHash = await SecurityUtils.hashPassword(inputPassword);
+    return inputHash === this.passwordHash;
   }
 }

@@ -24,7 +24,7 @@ export const LoginPage = (callbacks) => `
 `;
 
 export const SetupPage = (state, callbacks) => `
-  ${Header('Qualidade', new Date().toLocaleDateString('pt-BR'), 'Novo Checklist')}
+  ${Header('Qualidade', new Date().toLocaleDateString('pt-BR'), 'Novo Checklist', true)}
   <div class="setup-wrap">
     <h2>Olá! 👋</h2>
     <p>Configure o preenchimento de hoje antes de começar.</p>
@@ -74,7 +74,7 @@ export const SetupPage = (state, callbacks) => `
 `;
 
 export const ChecklistPage = (state, stats, sectors, callbacks) => `
-  ${Header(state.lojaLabel, state.todayISO, state.nome + ' · Relatório ' + state.relatorio)}
+  ${Header(state.lojaLabel, state.todayISO, state.nome + ' · Relatório ' + state.relatorio, true)}
   <div class="progress-bar-wrap">
     <div class="progress-bar-fill" id="progressFill" style="width:${stats.pct}%"></div>
   </div>
@@ -98,7 +98,7 @@ export const ChecklistPage = (state, stats, sectors, callbacks) => `
 `;
 
 export const SuccessPage = (state) => `
-  ${Header('Qualidade', '', 'Tudo certo!')}
+  ${Header('Qualidade', '', 'Tudo certo!', true)}
   <div class="success-wrap">
     <div class="success-icon">✅</div>
     <h2>Checklist enviado!</h2>

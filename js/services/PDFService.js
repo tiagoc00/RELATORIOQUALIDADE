@@ -1,5 +1,8 @@
+import { SecurityUtils } from './SecurityUtils.js';
+
 export class PDFService {
   generateHTML(state, stats, sectors) {
+    const esc = SecurityUtils.escapeHTML;
     const lojaLabel = state.loja === 'antonio-sales' ? 'Antônio Sales' : 'Messejana';
     const dateStr = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
 
@@ -16,13 +19,13 @@ export class PDFService {
              <div class="photos-grid">${r.photos.map(src => `<img src="${src}" class="photo-img">`).join('')}</div>`
           : '';
         const obsHTML = (r.status === 'nao-conforme' && r.obs)
-          ? `<div class="item-obs">📝 ${r.obs}</div>` : '';
+          ? `<div class="item-obs">📝 ${esc(r.obs)}</div>` : '';
           
         itemsHTML += `
           <div class="item item-${statusClass}">
             <div class="item-row">
-              <span class="item-code">${item.id}</span>
-              <span class="item-text">${item.text}</span>
+              <span class="item-code">${esc(item.id)}</span>
+              <span class="item-text">${esc(item.text)}</span>
               <span class="badge badge-${statusClass}">${statusLabel}</span>
             </div>
             ${obsHTML}${photosHTML}
@@ -30,7 +33,7 @@ export class PDFService {
       });
       sectorsHTML += `
         <div class="sector">
-          <div class="sector-title">${setor.icon} ${setor.label.toUpperCase()}</div>
+          <div class="sector-title">${setor.icon} ${esc(setor.label.toUpperCase())}</div>
           ${itemsHTML}
         </div>`;
     });
@@ -94,8 +97,8 @@ export class PDFService {
 <body>
 <div class="page">
   <div class="header">
-    <h1>Checklist de Conformidade · Relatório ${state.relatorio}</h1>
-    <p class="header-meta">Loja: ${lojaLabel} | Estagiária: ${state.nome} | Gerente: ${state.gerente || '—'} | ${dateStr}</p>
+    <h1>Checklist de Conformidade · Relatório ${esc(state.relatorio)}</h1>
+    <p class="header-meta">Loja: ${esc(lojaLabel)} | Estagiária: ${esc(state.nome)} | Gerente: ${esc(state.gerente || '—')} | ${esc(dateStr)}</p>
   </div>
   <div class="summary">
     <div class="sum-box pct"><div class="sum-val green">${stats.score}%</div><div class="sum-label">Conformidade</div></div>
@@ -109,12 +112,12 @@ export class PDFService {
       <div class="sig-box">
         <p>Estagiária</p>
         <div class="sig-img-wrap">${state.sigData.estagiaria ? `<img src="${state.sigData.estagiaria}" class="sig-img">` : '<div class="sig-line"></div>'}</div>
-        <p>${state.nome}</p>
+        <p>${esc(state.nome)}</p>
       </div>
       <div class="sig-box">
         <p>Gerente de Loja</p>
         <div class="sig-img-wrap">${state.sigData.gerente ? `<img src="${state.sigData.gerente}" class="sig-img">` : '<div class="sig-line"></div>'}</div>
-        <p>${state.gerente || '—'}</p>
+        <p>${esc(state.gerente || '—')}</p>
       </div>
     </div>
   </div>

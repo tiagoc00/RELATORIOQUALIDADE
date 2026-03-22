@@ -8,11 +8,15 @@ import * as Pages from './components/pages.js';
 
 class App {
   constructor() {
-    this.auth = new AuthService(CONFIG.APP_PASSWORD);
+    this.auth = new AuthService(CONFIG.APP_PASSWORD_HASH);
     this.checklist = new ChecklistService(SETORES, RELATORIOS);
     this.pdf = new PDFService();
     this.sigService = null;
-    this.currentScreen = 'screenLogin';
+    
+    // Check session storage for existing login
+    const sessionToken = sessionStorage.getItem('isLoggedIn');
+    this.currentScreen = sessionToken === 'true' ? 'screenSetup' : 'screenLogin';
+    
     this.sigTarget = null;
     
     this.init();
@@ -65,14 +69,30 @@ class App {
     this.render();
   }
 
-  doLogin() {
-    const pw = document.getElementById('loginPassword').value;
+  async doLogin() {
+    const pwInput = document.getElementById('loginPassword');
+    const pw = pwInput.value;
     const err = document.getElementById('loginError');
-    if (this.auth.login(pw)) {
-      this.showScreen('screenSetup');
-    } else {
-      err.style.display = 'block';
+    const loading = document.getElementById('loadingOverlay');
+
+    if (loading) loading.classList.add('open');
+    try {
+      if (await this.auth.login(pw)) {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        this.showScreen('screenSetup');
+      } else {
+        err.style.display = 'block';
+        pwInput.value = '';
+      }
+    } finally {
+      if (loading) loading.classList.remove('open');
     }
+  }
+
+  doLogout() {
+    sessionStorage.removeItem('isLoggedIn');
+    this.currentScreen = 'screenLogin';
+    this.render();
   }
 
   selectOption(btn, group, val) {

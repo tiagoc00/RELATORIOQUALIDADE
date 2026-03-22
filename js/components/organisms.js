@@ -1,11 +1,14 @@
 import { StatChip, PhotoItem } from './molecules.js';
 import { Pill } from './atoms.js';
 
-export const Header = (title, meta = '', subtitle = '') => `
+export const Header = (title, meta = '', subtitle = '', showLogout = false) => `
   <div class="header">
     <div class="header-top">
-      <span class="logo">${title}</span>
-      <span class="header-meta">${meta}</span>
+      <div style="display:flex;flex-direction:column;">
+        <span class="logo">${title}</span>
+        <span class="header-meta">${meta}</span>
+      </div>
+      ${showLogout ? '<button class="btn-logout" onclick="window.app.doLogout()">Sair 🚪</button>' : ''}
     </div>
     <h1>${subtitle}</h1>
   </div>
