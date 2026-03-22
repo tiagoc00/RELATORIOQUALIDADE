@@ -30,8 +30,15 @@ export const ChecklistItemCard = (item, response, callbacks) => {
     'na': 'active-na'
   };
 
-  const photosHTML = (photos || []).map((src, i) => 
-    PhotoItem({ src, id, index: i, onRemove: callbacks.onPhotoRemove })
+  const photosHTML = (photos || []).map((photo, i) => 
+    PhotoItem({ 
+      src: photo.src, 
+      id, 
+      index: i, 
+      caption: photo.caption,
+      onRemove: callbacks.onPhotoRemove,
+      onCaptionInput: callbacks.onPhotoCaptionInput
+    })
   ).join('');
 
   return `

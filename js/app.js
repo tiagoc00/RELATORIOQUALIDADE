@@ -46,7 +46,8 @@ class App {
           onStatusChange: 'window.app.setStatus',
           onObsInput: 'window.app.saveObs',
           onPhotoAdd: 'window.app.addPhotos',
-          onPhotoRemove: 'window.app.removePhoto'
+          onPhotoRemove: 'window.app.removePhoto',
+          onPhotoCaptionInput: 'window.app.savePhotoCaption'
         });
         break;
       case 'screenSuccess':
@@ -144,6 +145,10 @@ class App {
   removePhoto(id, idx) {
     this.checklist.removePhoto(id, idx);
     this.render();
+  }
+
+  savePhotoCaption(id, idx, caption) {
+    this.checklist.setPhotoCaption(id, idx, caption);
   }
 
   openSigModal(who) {

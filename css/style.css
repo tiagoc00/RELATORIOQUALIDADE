@@ -418,7 +418,23 @@ body {
 }
 .photo-add span { font-size: 10px; margin-top: 4px; }
 
-.photo-item { position: relative; display: inline-block; }
+.photo-item { 
+  position: relative; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4px; 
+}
+.photo-caption-input {
+  width: 72px;
+  padding: 4px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 10px;
+  background: var(--bg);
+  outline: none;
+}
+.photo-caption-input:focus { border-color: var(--accent); background: #fff; }
 .photo-remove {
   position: absolute; top: -6px; right: -6px; width: 20px; height: 20px;
   background: var(--danger); color: #fff; border-radius: 50%;

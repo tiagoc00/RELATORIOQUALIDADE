@@ -16,7 +16,11 @@ export class PDFService {
         const statusLabel = r.status === 'conforme' ? '✓ CONFORME' : r.status === 'nao-conforme' ? '✗ NÃO CONF.' : '— N/A';
         const photosHTML = (r.status === 'nao-conforme' && r.photos.length > 0)
           ? `<div class="photos-label">📷 Registros fotográficos:</div>
-             <div class="photos-grid">${r.photos.map(src => `<img src="${src}" class="photo-img">`).join('')}</div>`
+             <div class="photos-grid">${r.photos.map(p => `
+               <div class="photo-container">
+                 <img src="${p.src}" class="photo-img">
+                 ${p.caption ? `<div class="photo-caption">${esc(p.caption)}</div>` : ''}
+               </div>`).join('')}</div>`
           : '';
         const obsHTML = (r.status === 'nao-conforme' && r.obs)
           ? `<div class="item-obs">📝 ${esc(r.obs)}</div>` : '';
@@ -79,8 +83,10 @@ export class PDFService {
   .badge-na   { background: #ccc; color: #555; }
   .item-obs { font-size: 9px; color: #7A3020; margin-top: 6px; font-style: italic; }
   .photos-label { font-size: 9px; font-weight: 600; color: #C0392B; margin-top: 8px; }
-  .photos-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .photos-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .photo-container { width: 90px; display: flex; flex-direction: column; }
   .photo-img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #E0DDD6; }
+  .photo-caption { font-size: 8px; color: #7A7770; margin-top: 2px; text-align: center; line-height: 1.2; word-break: break-word; }
   .sig-section { margin-top: 24px; border: 1.5px solid #E0DDD6; border-radius: 8px; padding: 16px; }
   .sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .sig-box { text-align: center; }

@@ -36,9 +36,10 @@ export const StatChip = ({ label, type, id }) => `
   <span class="stat-chip ${type}" id="${id}">${label}</span>
 `;
 
-export const PhotoItem = ({ src, id, index, onRemove }) => `
+export const PhotoItem = ({ src, id, index, caption = '', onRemove, onCaptionInput }) => `
   <div class="photo-item">
     <img class="photo-thumb" src="${src}">
     <button class="photo-remove" onclick="${onRemove}('${id}', ${index})">×</button>
+    <input type="text" class="photo-caption-input" placeholder="Legenda..." value="${caption}" oninput="${onCaptionInput}('${id}', ${index}, this.value)">
   </div>
 `;
