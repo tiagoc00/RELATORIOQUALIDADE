@@ -1,5 +1,5 @@
 import { StatChip, PhotoItem } from './molecules.js';
-import { Pill } from './atoms.js';
+import { Pill, ThemeToggle } from './atoms.js';
 
 export const Header = (title, meta = '', subtitle = '', showLogout = false) => `
   <div class="header">
@@ -8,7 +8,10 @@ export const Header = (title, meta = '', subtitle = '', showLogout = false) => `
         <span class="logo">${title}</span>
         <span class="header-meta">${meta}</span>
       </div>
-      ${showLogout ? '<button class="btn-logout" onclick="window.app.doLogout()">Sair 🚪</button>' : ''}
+      <div style="display:flex;align-items:center;gap:12px;">
+        ${ThemeToggle(window.app && window.app.isDarkMode, 'window.app.toggleTheme(this.checked)')}
+        ${showLogout ? '<button class="btn-logout" onclick="window.app.doLogout()">Sair 🚪</button>' : ''}
+      </div>
     </div>
     <h1>${subtitle}</h1>
   </div>
@@ -30,16 +33,18 @@ export const ChecklistItemCard = (item, response, callbacks) => {
     'na': 'active-na'
   };
 
-  const photosHTML = (photos || []).map((photo, i) => 
-    PhotoItem({ 
-      src: photo.src, 
+  const photosHTML = (photos || []).map((photo, i) => {
+    const src = typeof photo === 'string' ? photo : photo.src;
+    const caption = typeof photo === 'string' ? '' : (photo.caption || '');
+    return PhotoItem({ 
+      src, 
       id, 
       index: i, 
-      caption: photo.caption,
+      caption,
       onRemove: callbacks.onPhotoRemove,
       onCaptionInput: callbacks.onPhotoCaptionInput
-    })
-  ).join('');
+    });
+  }).join('');
 
   return `
     <div class="item-card ${status ? statusClasses[status] : ''}" id="card-${id}">

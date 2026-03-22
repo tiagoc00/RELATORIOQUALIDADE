@@ -43,7 +43,14 @@ export class ChecklistService {
 
   setPhotoCaption(id, index, caption) {
     if (this.state.respostas[id] && this.state.respostas[id].photos[index]) {
-      this.state.respostas[id].photos[index].caption = caption;
+      if (typeof this.state.respostas[id].photos[index] === 'string') {
+        this.state.respostas[id].photos[index] = { 
+          src: this.state.respostas[id].photos[index], 
+          caption: caption 
+        };
+      } else {
+        this.state.respostas[id].photos[index].caption = caption;
+      }
     }
   }
 

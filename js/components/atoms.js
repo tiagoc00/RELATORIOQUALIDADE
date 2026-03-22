@@ -31,3 +31,10 @@ export const Pill = (text, icon = '') => `
 export const Badge = (label, type) => `
   <span class="badge badge-${type}">${label}</span>
 `;
+
+export const ThemeToggle = (isDark, onChange) => `
+  <label class="theme-switch" title="Alternar tema">
+    <input type="checkbox" id="themeToggleBtn" ${isDark ? 'checked' : ''} onchange="${onChange}">
+    <span class="slider round"></span>
+  </label>
+`;

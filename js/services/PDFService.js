@@ -16,11 +16,15 @@ export class PDFService {
         const statusLabel = r.status === 'conforme' ? '✓ CONFORME' : r.status === 'nao-conforme' ? '✗ NÃO CONF.' : '— N/A';
         const photosHTML = (r.status === 'nao-conforme' && r.photos.length > 0)
           ? `<div class="photos-label">📷 Registros fotográficos:</div>
-             <div class="photos-grid">${r.photos.map(p => `
+             <div class="photos-grid">${r.photos.map(p => {
+               const src = typeof p === 'string' ? p : p.src;
+               const caption = typeof p === 'string' ? '' : (p.caption || '');
+               return `
                <div class="photo-container">
-                 <img src="${p.src}" class="photo-img">
-                 ${p.caption ? `<div class="photo-caption">${esc(p.caption)}</div>` : ''}
-               </div>`).join('')}</div>`
+                 <img src="${src}" class="photo-img">
+                 ${caption ? `<div class="photo-caption">${esc(caption)}</div>` : ''}
+               </div>`;
+             }).join('')}</div>`
           : '';
         const obsHTML = (r.status === 'nao-conforme' && r.obs)
           ? `<div class="item-obs">📝 ${esc(r.obs)}</div>` : '';

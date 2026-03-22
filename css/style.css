@@ -17,6 +17,23 @@
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
 }
 
+[data-theme="dark"] {
+  --bg: #1A1916;
+  --surface: #24231E;
+  --surface2: #2E2C26;
+  --border: #424038;
+  --text: #F5F4F0;
+  --text-muted: #A09C90;
+  --accent: #2FB369;
+  --accent-light: #183B25;
+  --danger: #E24F3F;
+  --danger-light: #521F18;
+  --warning: #F5A623;
+  --warning-light: #5C3806;
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -61,6 +78,33 @@ body {
   font-family: 'DM Mono', monospace;
 }
 
+[data-theme="dark"] .header {
+  background: var(--surface);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── THEME SWITCH ── */
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.theme-switch input { opacity: 0; width: 0; height: 0; }
+.theme-switch .slider {
+  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--surface2); border: 1.5px solid var(--border); transition: .3s;
+}
+.theme-switch .slider:before {
+  position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px;
+  background-color: var(--text-muted); transition: .3s;
+}
+.theme-switch input:checked + .slider { background-color: var(--accent); border-color: var(--accent); }
+.theme-switch input:checked + .slider:before { transform: translateX(20px); background-color: #fff; }
+.theme-switch .slider.round { border-radius: 24px; }
+.theme-switch .slider.round:before { border-radius: 50%; }
+
 /* ── LOGIN SCREEN ── */
 .login-wrap {
   min-height: 100vh;
@@ -70,6 +114,9 @@ body {
   justify-content: center;
   padding: 32px 20px;
   background: var(--text);
+}
+[data-theme="dark"] .login-wrap {
+  background: var(--bg);
 }
 .login-box {
   background: var(--surface);
@@ -286,6 +333,10 @@ body {
   padding: 4px 10px;
   border-radius: 20px;
   font-family: 'DM Mono', monospace;
+}
+[data-theme="dark"] .sector-pill {
+  background: var(--surface2);
+  color: var(--text);
 }
 .sector-count {
   font-size: 12px;
@@ -526,4 +577,10 @@ body {
 .btn-logout:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .btn-logout {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
 }

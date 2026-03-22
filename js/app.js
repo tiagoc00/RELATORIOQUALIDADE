@@ -19,6 +19,10 @@ class App {
     
     this.sigTarget = null;
     
+    // Theme setup
+    this.isDarkMode = localStorage.getItem('theme') === 'dark';
+    this.applyTheme();
+    
     this.init();
   }
 
@@ -68,6 +72,21 @@ class App {
     this.currentScreen = name;
     this.render();
     window.scrollTo(0, 0);
+  }
+
+  applyTheme() {
+    if (this.isDarkMode) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+
+  toggleTheme(checked) {
+    this.isDarkMode = checked;
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+    this.applyTheme();
+    this.render();
   }
 
   async doLogin() {
